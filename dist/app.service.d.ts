@@ -1,3 +1,15 @@
 export declare class AppService {
-    getHello(): string;
+    products: {
+        id: number;
+        name: string;
+        description: string;
+        price: string;
+    }[];
+    getProducts(): Promise<{
+        id: number;
+        name: string;
+        description: string;
+        price: string;
+    }[]>;
+    hi(): Promise<string>;
 }
