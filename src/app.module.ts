@@ -7,9 +7,10 @@ import { ReservationsModule } from './reservations/reservations.module';
 import { SeasonModule } from './season/season.module';
 import { DocumentsModule } from './documents/documents.module';
 import { ArchivedDocumentsModule } from './archived-documents/archived-documents.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [UsersModule, RoomsModule, ReservationsModule, SeasonModule, DocumentsModule, ArchivedDocumentsModule],
+  imports: [UsersModule, RoomsModule, ReservationsModule, SeasonModule, DocumentsModule, ArchivedDocumentsModule, MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.ofoym.mongodb.net/pfeDatabase?retryWrites=true&w=majority')],
   controllers: [AppController],
   providers: [AppService],
 })
