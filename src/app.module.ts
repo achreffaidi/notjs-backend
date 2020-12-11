@@ -8,10 +8,11 @@ import { SeasonModule } from './season/season.module';
 import { DocumentsModule } from './documents/documents.module';
 import { ArchivedDocumentsModule } from './archived-documents/archived-documents.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AzureService } from './azure/azure.service';
 
 @Module({
   imports: [UsersModule, RoomsModule, ReservationsModule, SeasonModule, DocumentsModule, ArchivedDocumentsModule, MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.ofoym.mongodb.net/pfeDatabase?retryWrites=true&w=majority')],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AzureService],
 })
 export class AppModule {}
