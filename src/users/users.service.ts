@@ -4,10 +4,14 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { compare, hash } from 'bcrypt';
+import { UserLoginDto } from './dto/user-login.dto';
+import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private jwtService: JwtService
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     const userCreated = new this.userModel(createUserDto);
@@ -19,12 +23,20 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  async userLogin(createUserDto: CreateUserDto): Promise<any> {
-    let u = await this.userModel.findOne({ email: createUserDto.email }).exec();
-    if (!u)
+  async userLogin(loginDto: UserLoginDto): Promise<any> {
+    let user = await this.userModel.findOne({ email: loginDto.email }).exec();
+    if (!user)
       throw new NotFoundException('Email not found');
-    if(await compare(createUserDto.password, u.password))
-      return u;
+    if(await compare(loginDto.password, user.password)) {
+      const payload = {
+        id: user.id,
+        email: user.email,
+      }
+      const jwt = this.jwtService.sign(payload);
+      return {
+        "access_token": jwt
+      }
+    }
     else
       throw new NotFoundException('Incorrect Pass');
   }
