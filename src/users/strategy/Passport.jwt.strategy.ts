@@ -14,7 +14,7 @@ export class PassportJwtStrategy extends PassportStrategy(Strategy) {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // token must be added in auth bearer token in req
       secretOrKey: process.env.SECRET_KEY
     });
   }

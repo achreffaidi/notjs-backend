@@ -26,7 +26,7 @@ async login(@Body() loginDto: UserLoginDto): Promise<any> {
     return await this.usersService.userLogin(loginDto);
 }
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt')) // To add guard on the token
 @Get('testauth')
     get(@Req() request: Request
 ): string {
