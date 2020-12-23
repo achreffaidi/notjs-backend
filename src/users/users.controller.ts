@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, UseGuards, Req } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './schemas/user.schema';
 import { UsersModule } from './users.module';
+import { UserLoginDto } from './dto/user-login.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -12,19 +15,22 @@ export class UsersController {
     return 'Return current user';
   }
 
-@Post('test')
+@Post('signup')
 async register(@Body() createUserDto: CreateUserDto): Promise<string> {
     var result = await this.usersService.create(createUserDto);
     return result.name + ' created';
 }
 @Post('login')
-async login(@Body() createUserDto: CreateUserDto): Promise<any> {
-        console.log(createUserDto);
-    return await this.usersService.userLogin(createUserDto);
+async login(@Body() loginDto: UserLoginDto): Promise<any> {
+
+    return await this.usersService.userLogin(loginDto);
 }
-@Get()
-    get(): string {
-    return 'get user info';
+
+@UseGuards(AuthGuard('jwt')) // To add guard on the token
+@Get('testauth')
+    get(@Req() request: Request
+): string {
+    return request.body.test ;
 }
 @Get('test')
     getAll(): Promise<User[]> {
